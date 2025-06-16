@@ -14,4 +14,15 @@ class ShoeModel {
     required this.oldPrice,
     required this.rating,
   });
+
+  factory ShoeModel.fromJson(Map<String, dynamic> json) {
+    return ShoeModel(
+      imageUrl: json["image"] ?? "",
+      name: json["title"] ?? "No Name",
+      description: json["description"] ?? "No Description",
+      price: "${json["price"]} EGP",
+      oldPrice: "${(json["price"] * 1.2).toStringAsFixed(2)} EGP", // Fake old price (20% more)
+      rating: json["rating"] != null ? json["rating"]["rate"].toString() : "0.0",
+    );
+  }
 }

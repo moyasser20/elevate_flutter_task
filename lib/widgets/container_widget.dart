@@ -34,8 +34,8 @@ class containerWidget extends StatelessWidget {
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
                       ),
-                      child: Image.asset(
-                        "assets/images/img.png",
+                      child: Image.network(
+                        shoeModel.imageUrl,
                         height: constraints.maxHeight * 0.4,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -45,11 +45,20 @@ class containerWidget extends StatelessWidget {
                       top: 10,
                       right: 10,
                       child: GestureDetector(
-                        onTap: ()
-                          {
-                            print("Fav clicked");
-                          },
-                          child: Icon(Icons.favorite_border, color: Colors.blue, size: 30,)),
+                        onTap: () {
+                          print("Fav clicked");
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.blue, width: 2),
+                          ),
+                          child: Icon(Icons.favorite_border, color: Colors.blue, size: 24),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -100,7 +109,20 @@ class containerWidget extends StatelessWidget {
                       ),
                       Icon(Icons.star, color: Colors.yellow, size: 16),
                       Spacer(),
-                      const Icon(Icons.add_circle_outline, color: Colors.blue),
+                      GestureDetector(
+                        onTap: () {
+                          print("Plus clicked");
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.add, color: Colors.white, size: 24),
+                        ),
+                      ),
                     ],
                   ),
                 ),

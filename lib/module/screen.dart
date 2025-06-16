@@ -1,78 +1,42 @@
 import 'package:flutter/material.dart';
 
+import '../core/network/api_network.dart';
 import '../model/show_model.dart';
 import '../widgets/container_widget.dart';
 
-class screen extends StatelessWidget {
-   screen({super.key});
-
-  final List<ShoeModel> shoes = [
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,200",
-      oldPrice: "2,000 EGP",
-      rating: "4.8",
-    ),
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,100",
-      oldPrice: "1,500 EGP",
-      rating: "4.8",
-    ),
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,000",
-      oldPrice: "1,300 EGP",
-      rating: "4.8",
-    ),
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,500",
-      oldPrice: "2,000 EGP",
-      rating: "4.8",
-    ),
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,800",
-      oldPrice: "2,100 EGP",
-      rating: "4.8",
-    ),
-    ShoeModel(
-      imageUrl: "assets/images/img.png",
-      name: "Nike Air Jordan",
-      description: "Nike shoes flexible for women",
-      price: "EGP 1,900",
-      oldPrice: "2,500 EGP",
-      rating: "4.8",
-    ),
-  ];
-
+class Screen extends StatelessWidget {
+  const Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: GridView.builder(
-        itemCount: shoes.length,
-        padding: EdgeInsets.all(12),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 0.7,
-        ),
-        itemBuilder: (context, index) {
-          return containerWidget(shoeModel: shoes[index]);
+      body: FutureBuilder<List<ShoeModel>>(
+        future: ApiNetwork.getShoes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text("No shoes found."));
+          }
+
+          final shoes = snapshot.data!;
+
+          return GridView.builder(
+            itemCount: shoes.length,
+            padding: const EdgeInsets.all(12),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.7,
+            ),
+            itemBuilder: (context, index) {
+              return containerWidget(shoeModel: shoes[index]);
+            },
+          );
         },
       ),
     );
