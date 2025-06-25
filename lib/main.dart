@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'core/providers/provider.dart';
 import 'module/screen.dart';
 
 GlobalKey<NavigatorState> navigatorKey=GlobalKey<NavigatorState>();
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => ProductProvider()..loadProducts(),
+    child: MyApp(),
+  ),);
 }
 
 class MyApp extends StatelessWidget {
@@ -21,4 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
